@@ -1,6 +1,9 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
+import { Link } from "react-router-dom";
 
 import { getAllCocktails } from "../../utils/api";
+
+const slugify = (name: string): string => name.toLowerCase().replace(/ /g, "-");
 
 const Cocktails = () => {
   const [cocktails, setCocktails] = useState([]);
@@ -25,7 +28,11 @@ const Cocktails = () => {
       <input type="text" value={search} onChange={onSearchChange} />
       <ul>
         {cocktails.map((cocktail: any) => (
-          <li key={cocktail.name}>{cocktail.name}</li>
+          <li key={cocktail.name}>
+            <Link to={`/cocktail/${slugify(cocktail.name)}`}>
+              {cocktail.name}
+            </Link>
+          </li>
         ))}
       </ul>
     </div>

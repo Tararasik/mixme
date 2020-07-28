@@ -6,6 +6,15 @@ const arrayContainsAnotherArray = (needle, haystack) => {
   return true;
 };
 
+const getCocktail = async (ctx, db) => {
+  const { name } = ctx.params;
+  const cocktail = await db
+    .collection("cocktails")
+    .findOne({ name: { $regex: name.replace(/-/g, " "), $options: "i" } });
+
+  ctx.body = cocktail;
+};
+
 const allCocktails = async (ctx, db) => {
   const { q } = ctx.query;
 
@@ -14,7 +23,11 @@ const allCocktails = async (ctx, db) => {
     query = { name: { $regex: q, $options: "i" } };
   }
 
-  const cocktails = await db.collection("cocktails").find(query).toArray();
+  const cocktails = await db
+    .collection("cocktails")
+    .find(query)
+    .sort({ name: 1 })
+    .toArray();
 
   ctx.body = cocktails;
 };
@@ -43,6 +56,7 @@ const cocktailsByIngredients = async (ctx, db) => {
 };
 
 module.exports = {
+  getCocktail,
   allCocktails,
   cocktailsByIngredients,
 };

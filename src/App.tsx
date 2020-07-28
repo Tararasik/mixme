@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Bar from "./pages/Bar/Bar";
 import Cocktails from "./pages/Cocktails/Cocktails";
+import Cocktail from "./pages/Cocktail/Cocktail";
 
 import "./App.scss";
 
@@ -11,14 +12,25 @@ function App() {
     <div className="app">
       <Router>
         <nav className="app__nav">
-          <Link to="/">Home</Link>
-          <Link to="/bar">Bar</Link>
-          <Link to="/cocktails">Cocktails</Link>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/bar">Bar</Link>
+            </li>
+            <li>
+              <Link to="/cocktails">Cocktails</Link>
+            </li>
+          </ul>
         </nav>
         <div className="app__content">
           <Switch>
             <Route path="/bar">
               <Bar />
+            </Route>
+            <Route path="/cocktail/:name">
+              <Cocktail />
             </Route>
             <Route path="/cocktails">
               <Cocktails />
