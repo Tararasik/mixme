@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import Bar from "./Bar/Bar";
+import Bar from "./Bar";
 
 test("renders list of groups", () => {
   const { getByTestId } = render(<Bar />);

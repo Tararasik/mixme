@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"mixme.ingredients"}],"uuid":"6659170f29b04e9ab65798f36e9957b6"}

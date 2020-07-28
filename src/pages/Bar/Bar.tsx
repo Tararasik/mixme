@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../../utils/api";
+import { getIngredients, getCocktailsByIngredients } from "../../utils/api";
 
 import "./Bar.scss";
 
@@ -7,6 +7,18 @@ type Item = {
   id: string;
   groupCode: string;
   name: string;
+};
+
+type Cocktail = {
+  id: string;
+  name: string;
+  instructions: string;
+  glass: string;
+  srcThumb: string;
+  ingredients: {
+    name: string;
+    amount: string;
+  }[];
 };
 
 const ingredientList = [
@@ -23,14 +35,22 @@ export default () => {
   const [l1Ingredients, setL1Ingredients] = useState<Item[]>([]);
   const [l2Ingredients, setL2Ingredients] = useState<Item[]>([]);
   const [barItems, setBarItems] = useState<Item[]>([]);
+  const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+  const [cocktail, setCocktail] = useState<Cocktail>();
 
   const loadL1Ingredients = (groupCode: string) => {
     setL2Ingredients([]);
-    api.getIngredients(groupCode).then(setL1Ingredients);
+    getIngredients(groupCode).then((res) => {
+      if (groupCode === "PO") {
+        setL2Ingredients(res);
+      } else {
+        setL1Ingredients(res);
+      }
+    });
   };
 
   const loadL2Ingredients = (groupCode: string, parentId: string) => {
-    api.getIngredients(groupCode, parentId).then(setL2Ingredients);
+    getIngredients(groupCode, parentId).then(setL2Ingredients);
   };
 
   const toggleBarItem = (item: Item) => {
@@ -44,7 +64,14 @@ export default () => {
     setBarItems(prevBarItems);
   };
 
-  const getCocktails = () => {};
+  const getCocktails = () => {
+    const ingredients = barItems.map((item) => item.name.toLowerCase());
+    getCocktailsByIngredients(ingredients).then(setCocktails);
+  };
+
+  const showCocktail = (id: string) => {
+    setCocktail(cocktails.find((c) => c.id === id));
+  };
 
   return (
     <div className="bar">
@@ -102,6 +129,35 @@ export default () => {
             </button>
           )}
         </div>
+        <div className="bar__myCocktails">
+          <h4>My cocktails</h4>
+          <ul>
+            {cocktails.map((cocktail) => (
+              <li key={cocktail.id}>
+                <button onClick={() => showCocktail(cocktail.id)}>
+                  {cocktail.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="bar__cocktails">
+        {cocktail && (
+          <div className="bar__cocktail">
+            <h4>{cocktail.name}</h4>
+            {cocktail.srcThumb && <img src={cocktail.srcThumb} alt="" />}
+            <div>
+              {cocktail.ingredients.map((ingredient) => (
+                <p key={ingredient.name}>
+                  {ingredient.name}: {ingredient.amount}
+                </p>
+              ))}
+            </div>
+            <p>{cocktail.instructions}</p>
+            <p>{cocktail.glass}</p>
+          </div>
+        )}
       </div>
     </div>
   );

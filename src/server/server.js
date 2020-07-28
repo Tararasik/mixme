@@ -3,21 +3,29 @@ const Router = require("koa-router");
 const cors = require("@koa/cors");
 const MongoClient = require("mongodb").MongoClient;
 
+const { allCocktails, cocktailsByIngredients } = require("./routes/cocktails");
+const ingredients = require("./routes/ingredients");
+
 const url = "mongodb://localhost:27017";
 const dbName = "mixme";
 
 const app = new Koa();
 const router = new Router();
 
-MongoClient.connect(url, async (err, client) => {
+MongoClient.connect(url, { useUnifiedTopology: true }, async (err, client) => {
+  if (err) {
+    console.log(err);
+  }
   const db = client.db(dbName);
   app.use(cors({ origin: "*" }));
 
-  const ingredients = require("./routes/ingredients");
+  router.get("/api/cocktails", (ctx) => allCocktails(ctx, db));
+  router.get("/api/ingredients/:type/:parentId", (ctx) => ingredients(ctx, db));
+  router.get("/api/cocktails-by-ingredients", (ctx) =>
+    cocktailsByIngredients(ctx, db),
+  );
 
-  router.get("/ingredients/:type/:parentId", (ctx) => ingredients(ctx, db));
-
-  router.get("/", (ctx, next) => {
+  router.get("/cocktails", (ctx, next) => {
     ctx.body = "Hello World!";
   });
 
