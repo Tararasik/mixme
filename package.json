@@ -22,11 +22,12 @@
     "typescript": "^3.9.5"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-server": "node --trace-warnings ./src/server/server"
+    "start-client": "react-scripts start",
+    "start-server": "node ./src/server/server",
+    "start": "npm run start-server & npm run start-client"
   },
   "eslintConfig": {
     "extends": "react-app"

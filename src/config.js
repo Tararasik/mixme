@@ -4,4 +4,4 @@ const config = {
   DB_NAME: "mixme",
 };
 
-export default { ...config };
+module.exports = { ...config };
