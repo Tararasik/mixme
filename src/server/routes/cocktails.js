@@ -10,7 +10,7 @@ const getCocktail = async (ctx, db) => {
   const { name } = ctx.params;
   const cocktail = await db
     .collection("cocktails")
-    .findOne({ name: { $regex: name.replace(/-/g, " "), $options: "i" } });
+    .findOne({ title: { $regex: name.replace(/-/g, " "), $options: "i" } });
 
   ctx.body = cocktail;
 };

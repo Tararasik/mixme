@@ -3,17 +3,19 @@ import { withRouter, RouteChildrenProps } from "react-router-dom";
 
 import { getCocktail } from "../../utils/api";
 
-type Ingredient = {
+export type TIngredient = {
   name: string;
   amount: string;
+  measure: string;
 };
 
-type Cocktail = {
-  name: string;
+export type TCocktail = {
+  _id: string;
+  title: string;
   image: string;
-  instructions: string;
-  glass: string;
-  ingredients: Ingredient[];
+  method: string;
+  glassType: string;
+  ingredients: TIngredient[];
 };
 
 type Params = {
@@ -25,7 +27,7 @@ type Cocktails$Props = RouteChildrenProps<Params>;
 const Cocktails = (props: Cocktails$Props) => {
   const { name } = props && props.match ? props.match.params : { name: "" };
 
-  const [cocktail, setCocktail] = useState<Cocktail>();
+  const [cocktail, setCocktail] = useState<TCocktail>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,14 +44,14 @@ const Cocktails = (props: Cocktails$Props) => {
 
   return (
     <div className="cocktail">
-      <h1>{cocktail.name}</h1>
+      <h1>{cocktail.title}</h1>
       {cocktail.image && <img src={cocktail.image} alt="" />}
-      <p>{cocktail.glass}</p>
-      <p>{cocktail.instructions}</p>
+      <p>{cocktail.glassType}</p>
+      <p>{cocktail.method}</p>
       <ul>
         {cocktail.ingredients.map((ingredient) => (
           <li key={ingredient.name}>
-            {ingredient.name} {ingredient.amount}
+            {ingredient.name}: {ingredient.amount} {ingredient.measure}
           </li>
         ))}
       </ul>

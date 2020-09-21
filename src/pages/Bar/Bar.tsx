@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { getIngredients, getCocktailsByIngredients } from "../../utils/api";
+
+import { getIngredients } from "../../utils/api";
+import { slugify } from "../../utils/helpers";
 
 import "./Bar.scss";
 
@@ -7,18 +9,6 @@ type Item = {
   id: string;
   groupCode: string;
   name: string;
-};
-
-type Cocktail = {
-  id: string;
-  name: string;
-  instructions: string;
-  glass: string;
-  srcThumb: string;
-  ingredients: {
-    name: string;
-    amount: string;
-  }[];
 };
 
 const ingredientList = [
@@ -35,8 +25,6 @@ export default () => {
   const [l1Ingredients, setL1Ingredients] = useState<Item[]>([]);
   const [l2Ingredients, setL2Ingredients] = useState<Item[]>([]);
   const [barItems, setBarItems] = useState<Item[]>([]);
-  const [cocktails, setCocktails] = useState<Cocktail[]>([]);
-  const [cocktail, setCocktail] = useState<Cocktail>();
 
   const loadL1Ingredients = (groupCode: string) => {
     setL2Ingredients([]);
@@ -62,15 +50,6 @@ export default () => {
       prevBarItems.push(item);
     }
     setBarItems(prevBarItems);
-  };
-
-  const getCocktails = () => {
-    const ingredients = barItems.map((item) => item.name.toLowerCase());
-    getCocktailsByIngredients(ingredients).then(setCocktails);
-  };
-
-  const showCocktail = (id: string) => {
-    setCocktail(cocktails.find((c) => c.id === id));
   };
 
   return (
@@ -124,40 +103,15 @@ export default () => {
           </ul>
 
           {barItems.length > 0 && (
-            <button type="button" onClick={getCocktails}>
+            <a
+              href={`/cocktails/my?ingr=${slugify(
+                barItems.map((item) => item.name.toLowerCase()).join(","),
+              )}`}
+            >
               Get cocktails
-            </button>
+            </a>
           )}
         </div>
-        <div className="bar__myCocktails">
-          <h4>My cocktails</h4>
-          <ul>
-            {cocktails.map((cocktail) => (
-              <li key={cocktail.id}>
-                <button onClick={() => showCocktail(cocktail.id)}>
-                  {cocktail.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className="bar__cocktails">
-        {cocktail && (
-          <div className="bar__cocktail">
-            <h4>{cocktail.name}</h4>
-            {cocktail.srcThumb && <img src={cocktail.srcThumb} alt="" />}
-            <div>
-              {cocktail.ingredients.map((ingredient) => (
-                <p key={ingredient.name}>
-                  {ingredient.name}: {ingredient.amount}
-                </p>
-              ))}
-            </div>
-            <p>{cocktail.instructions}</p>
-            <p>{cocktail.glass}</p>
-          </div>
-        )}
       </div>
     </div>
   );
