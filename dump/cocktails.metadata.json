@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"mixme.cocktails"}],"uuid":"4b294ab8f53243d0967314fb759ef714"}
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"mixme.cocktails"}],"uuid":"ecf4cc9b49704674b66728609f1c1e8a"}
