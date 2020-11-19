@@ -3,7 +3,7 @@ const Router = require("koa-router");
 const cors = require("@koa/cors");
 const MongoClient = require("mongodb").MongoClient;
 
-const { DB_NAME, DB_URL } = require("../config");
+const { DB_NAME, DB_URL } = require("./config");
 
 const {
   getCocktail,
