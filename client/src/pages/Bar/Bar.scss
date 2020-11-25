@@ -2,7 +2,57 @@
   &__ingredients {
     display: flex;
   }
+
   &__ingredientsList {
     width: 25%;
+  }
+}
+
+.ingredientsList {
+  &__item {
+    width: 100%;
+  }
+
+  &__button {
+    display: block;
+    width: 100%;
+    padding: calc(var(--base-line) * 2);
+    font-size: calc(var(--base-line) * 2);
+    border-left: 4px solid transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    text-align: left;
+    transition: background-color 0.2s;
+    cursor: pointer;
+
+    &_small {
+      padding: calc(var(--base-line));
+      font-size: 14px;
+    }
+
+    &_po {
+      border-left-color: var(--popular);
+    }
+    &_sp {
+      border-left-color: var(--spirit);
+    }
+    &_lq {
+      border-left-color: var(--liquer);
+    }
+    &_wi {
+      border-left-color: var(--wine);
+    }
+    &_be {
+      border-left-color: var(--beer);
+    }
+    &_mx {
+      border-left-color: var(--mixer);
+    }
+    &_ot {
+      border-left-color: var(--other);
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
   }
 }

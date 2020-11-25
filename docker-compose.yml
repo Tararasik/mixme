@@ -2,18 +2,36 @@ version: "3"
 services:
   api:
     build: ./api
+    environment:
+      - PATH=/app/node_modules/.bin:$PATH
+      - MONGODB_HOST=mongo
+    volumes:
+      - ./api:/app
     ports:
-      - "8080:8080"
+      - "3001:3001"
     depends_on:
-      - db
+      - mongo
     container_name: mixme-api
+    command: ["sh", "-c", "npm run watch"]
+
   client:
     build: ./client
+    environment:
+      - PATH=/app/node_modules/.bin:$PATH
+    tty: true
+    volumes:
+      - ./client:/app
     ports:
-      - "80:80"
+      - "3000:3000"
+    depends_on:
+      - api
     container_name: mixme-client
-  db:
-    image: mongo
+    command: ["sh", "-c", "npm run start"]
+
+  mongo:
+    image: mongo:4
+    volumes:
+      - "/data/db"
     ports:
       - "27017:27017"
     container_name: mixme-db

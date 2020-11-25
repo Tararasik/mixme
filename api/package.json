@@ -12,6 +12,10 @@
     "node-sass": "^4.14.1"
   },
   "scripts": {
-    "start": "node ./server"
+    "start": "node ./server",
+    "watch": "nodemon  --nolazy ./index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }

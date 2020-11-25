@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import Header from "./components/Header/Header";
 import Bar from "./pages/Bar/Bar";
 import AllCocktails from "./pages/Cocktails/AllCocktails";
 import MyCocktails from "./pages/Cocktails/MyCocktails";
@@ -12,24 +13,7 @@ function App() {
   return (
     <div className="app">
       <Router>
-        <nav className="app__nav">
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/bar">Bar</Link>
-            </li>
-            <li>
-              <Link to="/cocktails">Cocktails</Link>
-              <ul>
-                <li>
-                  <Link to="/cocktails/my">My Cocktails</Link>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
+        <Header />
         <div className="app__content">
           <Switch>
             <Route path="/bar" component={Bar} />
