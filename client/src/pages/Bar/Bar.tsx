@@ -2,10 +2,11 @@ import React, { useState } from "react";
 
 import { getIngredients } from "../../utils/api";
 import { slugify } from "../../utils/helpers";
+import List from "../../components/List/List";
 
 import "./Bar.scss";
 
-type Item = {
+export type Item = {
   id: string;
   groupCode: string;
   name: string;
@@ -27,21 +28,24 @@ export default () => {
   const [l2Ingredients, setL2Ingredients] = useState<Item[]>([]);
   const [barItems, setBarItems] = useState<Item[]>([]);
 
-  const loadL1Ingredients = (groupCode: string) => {
-    setIngredientsGroup(ingredientList.find((g) => g.groupCode === groupCode));
+  const loadL1Ingredients = (item: Item) => {
+    setIngredientsGroup(
+      ingredientList.find((g) => g.groupCode === item.groupCode),
+    );
     setL2Ingredients([]);
 
-    getIngredients(groupCode).then((res) => {
-      if (groupCode === "PO") {
+    getIngredients(item.groupCode).then((res) => {
+      if (item.groupCode.toLowerCase() === "po") {
         setL2Ingredients(res);
       } else {
         setL1Ingredients(res);
+        setL2Ingredients([]);
       }
     });
   };
 
-  const loadL2Ingredients = (groupCode: string, parentId: string) => {
-    getIngredients(groupCode, parentId).then(setL2Ingredients);
+  const loadL2Ingredients = (item: Item) => {
+    getIngredients(item.groupCode, item.id).then(setL2Ingredients);
   };
 
   const toggleBarItem = (item: Item) => {
@@ -59,72 +63,44 @@ export default () => {
     ? ingredientsGroup.groupCode.toLowerCase()
     : "";
 
+  const getCocktailsUrl = () =>
+    `/cocktails/my?ingr=${slugify(
+      barItems.map((item) => item.name.toLowerCase()).join(","),
+    )}`;
+
   return (
     <div className="bar">
       <div className="bar__ingredients">
         <div className="bar__ingredientsList">
-          <ul data-testid="groupList" className="ingredientsList">
-            {ingredientList.map((item) => (
-              <li key={item.groupCode}>
-                <button
-                  onClick={() => loadL1Ingredients(item.groupCode)}
-                  className={`ingredientsList__button ingredientsList__button_${item.groupCode.toLowerCase()}`}
-                >
-                  {item.name}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <List items={ingredientList} onItemClick={loadL1Ingredients} />
         </div>
+
         <div className="bar__ingredientsList">
-          <ul>
-            {l1Ingredients.map((l1Item: Item) => (
-              <li key={l1Item.id}>
-                <button
-                  onClick={() => loadL2Ingredients(l1Item.groupCode, l1Item.id)}
-                  className={`ingredientsList__button ingredientsList__button_small ingredientsList__button_${activeGroupCode}`}
-                >
-                  {l1Item.name}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <List
+            items={l1Ingredients}
+            onItemClick={loadL2Ingredients}
+            mod={activeGroupCode}
+            small
+          />
         </div>
+
         <div className="bar__ingredientsList">
-          <ul>
-            {l2Ingredients.map((l2Item: Item) => (
-              <li key={l2Item.id}>
-                <button
-                  onClick={() => toggleBarItem(l2Item)}
-                  className={`ingredientsList__button ingredientsList__button_small ingredientsList__button_${activeGroupCode}`}
-                >
-                  {l2Item.name}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <List
+            items={l2Ingredients}
+            onItemClick={toggleBarItem}
+            mod={activeGroupCode}
+            small
+          />
         </div>
+
         <div className="bar__ingredientsList">
           <h4>My bar</h4>
-          {barItems.length === 0 && <p>Fill in your bar</p>}
-          <ul>
-            {barItems.map((barItem: Item) => (
-              <li key={barItem.id}>
-                <button
-                  onClick={() => toggleBarItem(barItem)}
-                  className={`ingredientsList__button ingredientsList__button_small ingredientsList__button_${barItem.groupCode.toLowerCase()}`}
-                >
-                  {barItem.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-
+          {barItems.length === 0 && <p>Add ingredients to your bar</p>}
+          <List items={barItems} onItemClick={toggleBarItem} small />
           {barItems.length > 0 && (
             <a
-              href={`/cocktails/my?ingr=${slugify(
-                barItems.map((item) => item.name.toLowerCase()).join(","),
-              )}`}
+              href={getCocktailsUrl()}
+              className="ingredientsList__getCocktails"
             >
               Get cocktails
             </a>

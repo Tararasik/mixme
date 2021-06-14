@@ -1,5 +1,7 @@
 // Colors
 :root {
+  --primary: #3a5874;
+
   --popular: #38908f;
   --spirit: #b2ebe0;
   --liquer: #5e96ae;
@@ -29,4 +31,13 @@ button {
   border: none;
   background: none;
   outline: none;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }

@@ -1,11 +1,12 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
 
 import { getAllCocktails } from "../../utils/api";
+import { TCocktail } from "../Cocktail/Cocktail";
 
 import Cocktails from "./Cocktails";
 
 const AllCocktails = () => {
-  const [cocktails, setCocktails] = useState([]);
+  const [cocktails, setCocktails] = useState<TCocktail[]>([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {

@@ -1,27 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { slugify } from "../../utils/helpers";
 import { TCocktail } from "../Cocktail/Cocktail";
+import List from "../../components/List/List";
 
-type Cocktails$Props = {
+type Props = RouteComponentProps & {
   cocktails: TCocktail[];
 };
 
-const Cocktails = ({ cocktails }: Cocktails$Props) => {
+const Cocktails = ({ cocktails, history }: Props) => {
+  const handleCocktailClick = (cocktail: TCocktail) =>
+    history.push(`/cocktail/${slugify(cocktail.title)}`);
+
   return (
     <div className="cocktails">
-      <ul>
-        {cocktails.map((cocktail: any) => (
-          <li key={cocktail._id}>
-            <Link to={`/cocktail/${slugify(cocktail.title)}`}>
-              {cocktail.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <List items={cocktails} onItemClick={handleCocktailClick} small />
     </div>
   );
 };
 
-export default Cocktails;
+export default withRouter(Cocktails);

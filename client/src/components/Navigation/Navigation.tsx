@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 import "./Navigation.scss";
+
 export default () => {
   return (
     <nav className="navigation">
